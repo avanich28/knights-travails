@@ -2,8 +2,6 @@ import './style.css';
 import board from './board.js';
 import { state, moveKnights } from './moveKnights.js';
 
-moveKnights('[3, 3]', '[4, 3]');
-
 const controlStart = function (position) {
   state.start = position;
 };

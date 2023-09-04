@@ -29,7 +29,7 @@ export const moveKnights = function (
       }
     }
   }
-  console.log(`You made it in ${paths.length} moves! Here's your path:`);
+  console.log(`You made it in ${paths.length - 1} moves! Here's your path:`);
   paths.forEach(el => console.log(el));
   return paths; // array
 };

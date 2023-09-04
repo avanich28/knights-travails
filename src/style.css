@@ -218,6 +218,9 @@ main {
   height: 50px;
   display: flex;
   justify-content: center;
+  color: var(--background-color);
+  line-height: 50px;
+  transition: all 0.1s ease-in-out;
 }
 
 .dark {

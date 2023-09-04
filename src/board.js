@@ -5,7 +5,7 @@ class Board {
   _img = document.createElement('img');
   _buttons = document.querySelectorAll('button');
   _message = document.querySelector('.message');
-  _curMode = 0; // 0 = start, 1 = end
+  _curMode = 0; // 0 = start, 1 = end, null = run
   _startPosition = [];
   _endPosition = [];
   _path = [];
@@ -20,6 +20,7 @@ class Board {
 
   addHandlerClickBoard(handlerStart, handlerEnd) {
     this._parentElement.addEventListener('click', e => {
+      if (this._curMode === null) return;
       const box = e.target.closest('.box');
       if (!box) return;
       if (this._curMode === 0) {
@@ -43,20 +44,22 @@ class Board {
 
   addHandlerClickRun(handler) {
     this._buttons[2].addEventListener('click', () => {
+      this._curMode = null;
       if (!this._startPosition.length) {
-        this._message.textContent = 'Please select the start position first!';
+        this._message.textContent = 'Please select a starting point!';
         return;
       }
       if (!this._endPosition.length) {
-        this._message.textContent = 'Please select the ending position!';
+        this._message.textContent = 'Please select a ending point!';
         return;
       }
       this._toggleActiveBtn(2);
       handler();
-      this._message.textContent = `You made it in ${this._path.length} moves!`;
+      this._message.textContent = `You made it in ${
+        this._path.length - 1
+      } moves!`;
+      this._animate();
     });
-
-    // animation
   }
 
   addHandlerClickClear(handler) {
@@ -64,20 +67,19 @@ class Board {
       this._parentElement.querySelectorAll('.box').forEach(box => {
         box.innerHTML = '';
         box.classList.remove('mark');
-        this._startPosition = [];
-        this._endPosition = [];
-        this._message.textContent = 'Please select the start position first!';
-        this._curMode = 0;
-        this._path = '';
-        this._toggleActiveBtn(0);
-        handler();
       });
+      this._startPosition = [];
+      this._endPosition = [];
+      this._message.textContent = 'Please select a starting point : )';
+      this._curMode = 0;
+      this._path = '';
+      this._toggleActiveBtn(0);
+      handler();
     });
   }
 
   getPaths(path) {
     this._path = path;
-    console.log(this._path);
   }
 
   _startBtnClick() {
@@ -103,15 +105,32 @@ class Board {
     document.querySelector('.active').classList.remove('active');
   }
 
+  _animate(temp = this._path.slice(1), count = 0) {
+    if (temp.length === 0) return;
+    let pos = JSON.parse(temp.shift());
+    let box = document.querySelector(
+      `[data-row='${pos[0]}'][data-column='${pos[1]}']`
+    );
+    box.innerHTML = '';
+    box.appendChild(this._img);
+
+    setTimeout(() => {
+      box.textContent = ++count;
+      this._animate(temp, count);
+    }, 1000);
+  }
+
   _createBoard() {
     for (let i = 0; i < 8; i++) {
       const div = document.createElement('div');
       div.classList.add('container');
+
       for (let j = 0; j < 8; j++) {
         const box = document.createElement('div');
         box.classList.add('box');
         box.dataset.row = i;
         box.dataset.column = j;
+
         if ((i % 2 === 0 && j % 2 === 0) || (i % 2 !== 0 && j % 2 !== 0))
           box.classList.add('light');
         else box.classList.add('dark');
