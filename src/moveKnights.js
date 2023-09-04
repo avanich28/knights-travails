@@ -5,7 +5,10 @@ export const state = {
   end: [],
 };
 
-export const moveKnights = function (start, end) {
+export const moveKnights = function (
+  start = `[${state.start[0]}, ${state.start[1]}]`,
+  end = `[${state.end[0]}, ${state.end[1]}]`
+) {
   let visited = [];
   let queue = [];
   let paths = [];
@@ -28,4 +31,5 @@ export const moveKnights = function (start, end) {
   }
   console.log(`You made it in ${paths.length} moves! Here's your path:`);
   paths.forEach(el => console.log(el));
+  return paths; // array
 };

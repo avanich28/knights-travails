@@ -12,7 +12,9 @@ const controlEnd = function (position) {
   state.end = position;
 };
 
-const controlRun = function () {};
+const controlRun = function () {
+  board.getPaths(moveKnights());
+};
 
 const controlClear = function () {
   state.start = [];

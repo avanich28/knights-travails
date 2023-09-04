@@ -4,9 +4,11 @@ class Board {
   _parentElement = document.querySelector('.board');
   _img = document.createElement('img');
   _buttons = document.querySelectorAll('button');
+  _message = document.querySelector('.message');
   _curMode = 0; // 0 = start, 1 = end
-  _startPosition = [0, 0];
-  _endPosition = [0, 0];
+  _startPosition = [];
+  _endPosition = [];
+  _path = [];
 
   constructor() {
     this._img.src = knight;
@@ -39,30 +41,66 @@ class Board {
     });
   }
 
-  addHandlerClickRun(handler) {}
+  addHandlerClickRun(handler) {
+    this._buttons[2].addEventListener('click', () => {
+      if (!this._startPosition.length) {
+        this._message.textContent = 'Please select the start position first!';
+        return;
+      }
+      if (!this._endPosition.length) {
+        this._message.textContent = 'Please select the ending position!';
+        return;
+      }
+      this._toggleActiveBtn(2);
+      handler();
+      this._message.textContent = `You made it in ${this._path.length} moves!`;
+    });
+
+    // animation
+  }
 
   addHandlerClickClear(handler) {
     this._buttons[3].addEventListener('click', () => {
       this._parentElement.querySelectorAll('.box').forEach(box => {
         box.innerHTML = '';
         box.classList.remove('mark');
-        this._startPosition = [0, 0];
-        this._endPosition = [0, 0];
+        this._startPosition = [];
+        this._endPosition = [];
+        this._message.textContent = 'Please select the start position first!';
+        this._curMode = 0;
+        this._path = '';
+        this._toggleActiveBtn(0);
         handler();
       });
     });
   }
 
+  getPaths(path) {
+    this._path = path;
+    console.log(this._path);
+  }
+
   _startBtnClick() {
     this._buttons[0].addEventListener('click', () => {
+      this._toggleActiveBtn(0);
       this._curMode = 0;
     });
   }
 
   _endBtnClick() {
     this._buttons[1].addEventListener('click', () => {
+      this._toggleActiveBtn(1);
       this._curMode = 1;
     });
+  }
+
+  _toggleActiveBtn(i) {
+    this._clearActiveBtn();
+    this._buttons[i].classList.add('active');
+  }
+
+  _clearActiveBtn() {
+    document.querySelector('.active').classList.remove('active');
   }
 
   _createBoard() {
