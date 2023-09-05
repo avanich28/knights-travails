@@ -144,6 +144,39 @@ table {
   --color-clear: rgb(96, 140, 77);
 }
 
+@keyframes moveDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(initial);
+  }
+}
+
+@keyframes moveUp {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(initial);
+  }
+}
+
+@keyframes expand {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 body {
   padding: 6vh 0;
   display: grid;
@@ -204,9 +237,19 @@ button:hover,
   transform: scale(1);
 }
 
+header,
+.message,
+.buttons {
+  animation: moveDown 2s forwards;
+}
+
 main {
   gap: 10px;
   margin-top: 15px;
+}
+
+.board {
+  animation: expand 2s forwards;
 }
 
 .container {
@@ -242,6 +285,7 @@ img {
 
 footer {
   gap: 10px;
+  animation: moveUp 2s forwards;
 }
 
 .bi-github {
